@@ -6,7 +6,7 @@ const TodoList = props => {
     const { todos, completeTodo } = props
     return (
         <div>
-            <h3 onCl>Todo List</h3>
+            <h3>Todo List</h3>
             {todos.map(todo => <TodoItem  key={todo.id} todo={todo} completeTodo={completeTodo}/>)}
         </div>
     )

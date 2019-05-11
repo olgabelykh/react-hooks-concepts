@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useReducer } from 'react'
 import TodoList from '../todo-list'
 import TodoForm from '../todo-form'
 import uuid from 'uuid/v4'
@@ -22,23 +22,43 @@ const initialTodos = [
 ]
 
 const TodoEditor = _ => {
-    const [todos, setTodos] = useState(initialTodos)
+    const todosReducer = (state, action) => {
+        const { type, payload } = action
+        switch (type) {
+            case 'ADD_TODO':
+                return state.concat({ ...payload.todo, id: uuid() });
+            case 'COMPLETE_TODO':
+                return state.map(todo => todo.id === payload.id ? { ...todo, complete: !todo.complete } : todo)
+            default:
+                return state
+        }
+    }
+
+    const [todos, dispatchTodos] = useReducer(todosReducer, initialTodos)
 
     const addTodo = todo => {
-        const updatedTodos = todos.concat({ ...todo, id: uuid() })
-        setTodos(updatedTodos)
+        return {
+            type: 'ADD_TODO',
+            payload: { todo }
+        }
     }
 
+    const dispatchAddTodo = todo => dispatchTodos(addTodo(todo))
+
     const completeTodo = id => {
-        const updatedTodos = todos.map(todo => todo.id === id ? { ...todo, complete: !todo.complete } : todo)
-        setTodos(updatedTodos)
+        return {
+            type: 'COMPLETE_TODO',
+            payload: { id }
+        }
     }
+
+    const dispatchCompleteTodo = id => dispatchTodos(completeTodo(id))
 
     return (
         <div>
             <h2>Todo Editor</h2>
-            <TodoForm addTodo={addTodo} />
-            <TodoList todos={todos} completeTodo={completeTodo}/>
+            <TodoForm addTodo={dispatchAddTodo} />
+            <TodoList todos={todos} completeTodo={dispatchCompleteTodo} />
         </div>
     )
 }
