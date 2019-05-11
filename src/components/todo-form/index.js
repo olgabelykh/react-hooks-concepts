@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
-const TodoForm = props => {
+import TodoContext from '../../context/todos'
+
+const TodoForm = () => {
     const [title, setTitle] = useState('')
+    const { addTodo } = useContext(TodoContext)
 
     const titleChangeHandler = event => setTitle(event.target.value)
 
     const submitHandler = event => {
-        const { addTodo } = props
-
         addTodo({ title })
         
         setTitle('')

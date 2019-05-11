@@ -3,6 +3,8 @@ import TodoList from '../todo-list'
 import TodoForm from '../todo-form'
 import uuid from 'uuid/v4'
 
+import TodoContext from '../../context/todos'
+
 const initialTodos = [
   {
       id: uuid(),
@@ -48,7 +50,6 @@ const completeTodo = id => {
 }
 
 const TodoEditor = _ => {
-
     const [todos, dispatchTodos] = useReducer(todosReducer, initialTodos)
     
     const dispatchAddTodo = todo => dispatchTodos(addTodo(todo))
@@ -56,11 +57,13 @@ const TodoEditor = _ => {
     const dispatchCompleteTodo = id => dispatchTodos(completeTodo(id))
 
     return (
+        <TodoContext.Provider value={{ addTodo: dispatchAddTodo, completeTodo: dispatchCompleteTodo }} >
         <div>
             <h2>Todo Editor</h2>
-            <TodoForm addTodo={dispatchAddTodo} />
-            <TodoList todos={todos} completeTodo={dispatchCompleteTodo} />
+            <TodoForm />
+            <TodoList todos={todos} />
         </div>
+        </TodoContext.Provider>
     )
 }
 
