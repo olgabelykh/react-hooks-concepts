@@ -1,11 +1,15 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 
 import TodoContext from '../../context/todos'
 
 const TodoForm = () => {
     const [title, setTitle] = useState('')
+    const [isInvalid, setInvalidStatus] = useState(true)
+
     const { addTodo } = useContext(TodoContext)
     const inputTitleRef = useRef()
+
+    useEffect(() => setInvalidStatus(!title), [title])
 
     const titleChangeHandler = event => setTitle(event.target.value)
 
@@ -22,12 +26,14 @@ const TodoForm = () => {
             <input
                 type="text"
                 name="title"
+                placeholder="todo title"
                 ref={inputTitleRef}
                 value={title}
                 onChange={titleChangeHandler} />
             <input
                 type="submit"
-                value="submit" />
+                value="submit"
+                disabled={isInvalid} />
         </form>
     )
 }
