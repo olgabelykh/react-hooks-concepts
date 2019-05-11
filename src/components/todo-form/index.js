@@ -1,18 +1,20 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 
 import TodoContext from '../../context/todos'
 
 const TodoForm = () => {
     const [title, setTitle] = useState('')
     const { addTodo } = useContext(TodoContext)
+    const inputTitleRef = useRef()
 
     const titleChangeHandler = event => setTitle(event.target.value)
 
     const submitHandler = event => {
-        addTodo({ title })
-        
-        setTitle('')
         event.preventDefault()
+
+        addTodo({ title })
+        inputTitleRef.current.focus()
+        setTitle('')
     } 
 
     return (
@@ -20,6 +22,7 @@ const TodoForm = () => {
             <input
                 type="text"
                 name="title"
+                ref={inputTitleRef}
                 value={title}
                 onChange={titleChangeHandler} />
             <input
