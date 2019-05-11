@@ -6,9 +6,9 @@ const TodoForm = props => {
     const titleChangeHandler = event => setTitle(event.target.value)
 
     const submitHandler = event => {
-        const {  submit } = props
+        const { addTodo } = props
 
-        submit({ title })
+        addTodo({ title })
         
         setTitle('')
         event.preventDefault()
